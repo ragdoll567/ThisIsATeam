@@ -5,6 +5,9 @@ import 'dart:math';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:herhackathon/Screens/Profile.dart';
+import 'package:herhackathon/Screens/RequestScreen.dart';
+import 'package:herhackathon/Screens/Scan.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:path_provider/path_provider.dart';
 import 'Message.dart';
@@ -57,6 +60,119 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavigationDrawer(
+        backgroundColor: Colors.white,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: CircleAvatar(
+              radius: (52),
+              backgroundColor: Colors.white,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.asset("images/avatar.png"),
+              ),
+            ),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.person,
+              color: Color(0xff2E68FF),
+            ),
+            title: Text(
+              'Profile',
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Profile(),
+                ),
+              ),
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.request_page,
+              color: Color(0xff2E68FF),
+            ),
+            title: Text(
+              'Requests',
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RequestScreen(),
+                ),
+              ),
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.group,
+              color: Color(0xff2E68FF),
+            ),
+            title: Text(
+              'Community',
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ScanScreen(),
+                ),
+              ),
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.notifications,
+              color: Color(0xff2E68FF),
+            ),
+            title: Text(
+              'Notifications',
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ScanScreen(),
+                ),
+              ),
+            },
+          ),
+          Divider(
+            color: Colors.black,
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.settings,
+              color: Color(0xff2E68FF),
+            ),
+            title: Text(
+              'Settings',
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+            onTap: () => null,
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.description,
+              color: Color(0xff2E68FF),
+            ),
+            title: Text(
+              'Privacy and Terms',
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+            onTap: () => null,
+          ),
+        ],
+      ),
       appBar: AppBar(
         toolbarHeight: 70,
         title: const Text(
@@ -162,24 +278,33 @@ class _HomeState extends State<Home> {
                   ),
                   Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Card(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10)),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(15.0),
-                            child: Text(
-                              "Scan items",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18),
+                      GestureDetector(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Card(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10)),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(15.0),
+                              child: Text(
+                                "Scan items",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 18),
+                              ),
                             ),
                           ),
                         ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ScanScreen()),
+                          );
+                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.all(0.0),
@@ -228,6 +353,7 @@ class _HomeState extends State<Home> {
                         sendMessage(_text);
                       } else {
                         sendMessage(_controller.text);
+                        _controller.clear();
                       }
                       _controller.clear();
                     },
@@ -282,7 +408,9 @@ class _HomeState extends State<Home> {
     } else {
       setState(() => _isListening = false);
       _speech.stop();
+
       sendMessage(_text);
+      _controller.clear();
     }
   }
 }
